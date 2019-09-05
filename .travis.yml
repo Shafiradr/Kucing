@@ -5,7 +5,7 @@ python:
 addons:
   apt:
     packages:
-      - ca-certificates
+     - ca-certificates
 
 install: "pip install Flask"
 
@@ -18,23 +18,23 @@ after_script:
   - |
     python app.py &
     APP_PID=$!
-  
-  # download and install ngrok
-  - curl -s https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+
+# download and install ngrok
+  - curl -s https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip > ngrok.zip
   - unzip ngrok.zip
   - ./ngrok http 5000 > /dev/null &
 
-  # sleep to allow ngrok to initialize
+#sleep to allow ngrok to initialize
   - sleep 2
 
-  # extract the ngrok url
+#extract the ngrok url
   - NGROK_URL=$(curl -s localhost:4040/api/tunnels/command_line | jq --raw-output .public_url)
- 
-  # execute the API tests
+
+#execute the API tests
   - |
-    curl -s $TRIGGER URL -d'{
-      "environment": "'"$TRAVIS_BRANCH_$TRAVIS_JOB_NUMBER"'",
-      "url":"'"$NGOK_URL"'",
-      "wait": true
+    curl -s $TRIGGER_URL -d'{
+      "environment": "'"$TRAVIS_BRANCH-$TRAVIS_JOB_NUMBER"'",
+      "url": "'"$NGROK_URL"'",
+      "wait": true 
     }'
   - kill $APP_PID
