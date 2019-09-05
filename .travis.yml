@@ -34,7 +34,7 @@ after_script:
   - |
     curl -s $TRIGGER URL -d'{
       "environment": "'"$TRAVIS_BRANCH_$TRAVIS_JOB_NUMBER"'",
-      "url":"'"$NGOK_URL"'",
+      "url":"'"$NGROK_URL"'",
       "wait": true
     }'
   - kill $APP_PID
